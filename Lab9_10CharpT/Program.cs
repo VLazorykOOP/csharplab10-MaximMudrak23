@@ -100,6 +100,9 @@ class FacultyDayEventArgs : EventArgs
 class Faculty
 {
     public event EventHandler<FacultyDayEventArgs> FacultyDay;
+    public event EventHandler<FacultyDayEventArgs> StudentDay;
+    public event EventHandler<FacultyDayEventArgs> TeacherDay; // Нова подія для "Дня викладача"
+    public event EventHandler<FacultyDayEventArgs> SportsDay; // Нова подія для "Дня спорту"
 
     public void CelebrateFacultyDay()
     {
@@ -107,20 +110,71 @@ class Faculty
         OnFacultyDay(new FacultyDayEventArgs("Faculty Day"));
     }
 
+    public void CelebrateStudentDay()
+    {
+        Console.WriteLine("Student Day is being celebrated!");
+        OnStudentDay(new FacultyDayEventArgs("Student Day"));
+    }
+
+    public void CelebrateTeacherDay()
+    {
+        Console.WriteLine("Teacher Day is being celebrated!");
+        OnTeacherDay(new FacultyDayEventArgs("Teacher Day"));
+    }
+
+    public void CelebrateSportsDay()
+    {
+        Console.WriteLine("Sports Day is being celebrated!");
+        OnSportsDay(new FacultyDayEventArgs("Sports Day"));
+    }
+
     protected virtual void OnFacultyDay(FacultyDayEventArgs e)
     {
         FacultyDay?.Invoke(this, e);
+    }
+
+    protected virtual void OnStudentDay(FacultyDayEventArgs e)
+    {
+        StudentDay?.Invoke(this, e);
+    }
+
+    protected virtual void OnTeacherDay(FacultyDayEventArgs e)
+    {
+        TeacherDay?.Invoke(this, e);
+    }
+
+    protected virtual void OnSportsDay(FacultyDayEventArgs e)
+    {
+        SportsDay?.Invoke(this, e);
     }
 }
 
 class Student
 {
-    public Student(Faculty faculty)
+    public Student(Faculty faculty) // Підписка на кожну подію
     {
         faculty.FacultyDay += Faculty_FacultyDay;
+        faculty.StudentDay += Faculty_StudentDay;
+        faculty.TeacherDay += Faculty_TeacherDay;
+        faculty.SportsDay += Faculty_SportsDay;
     }
 
     private void Faculty_FacultyDay(object sender, FacultyDayEventArgs e)
+    {
+        Console.WriteLine($"Student is celebrating {e.EventName}!");
+    }
+
+    private void Faculty_StudentDay(object sender, FacultyDayEventArgs e)
+    {
+        Console.WriteLine($"Student is celebrating {e.EventName}!");
+    }
+
+    private void Faculty_TeacherDay(object sender, FacultyDayEventArgs e)
+    {
+        Console.WriteLine($"Student is celebrating {e.EventName}!");
+    }
+
+    private void Faculty_SportsDay(object sender, FacultyDayEventArgs e)
     {
         Console.WriteLine($"Student is celebrating {e.EventName}!");
     }
@@ -159,8 +213,15 @@ class Program
             Faculty faculty = new Faculty();
 
             Student student = new Student(faculty);
+            Student student2 = new Student(faculty);
+            Student student3 = new Student(faculty);
+            Student student4 = new Student(faculty);
+            Student student5 = new Student(faculty);
 
             faculty.CelebrateFacultyDay();
+            faculty.CelebrateStudentDay();
+            faculty.CelebrateTeacherDay();
+            faculty.CelebrateSportsDay();
         }
         // Task2
     }
